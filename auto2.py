@@ -2,6 +2,10 @@ import time
 import os
 import pyautogui
 import webbrowser
+
+class CountryCodeException(Exception):
+    pass
+
 def sendmsg_with_photo(message , mobile , imgpath):
     pyautogui.FAILSAFE =True
     webbrowser.open('https://web.whatsapp.com')
@@ -66,10 +70,27 @@ def sendmsg_with_doc(message , mobile , filepath ,post = 0):
             pyautogui.press('enter')
         time.sleep(5)
 
+def sendmsg(message , mobile):
+    pyautogui.FAILSAFE =True
+    webbrowser.open('https://web.whatsapp.com')
+    time.sleep(10)
+    for phone_no in mobile:
+        if "+" not in phone_no:
+            raise CountryCodeException("Country code missing from phone_no")
+        url = 'https://web.whatsapp.com/send?phone='+phone_no+'&text='+message
+        pyautogui.click(x=878,y=74)
+        pyautogui.write(url)
+        time.sleep(1)
+        pyautogui.press(['delete','enter'])
+        time.sleep(5)
+        pyautogui.press('enter')
+        time.sleep(5)
+
+
 if __name__ == '__main__':
-    mobile = ['+916371134028' , '+918337925359']
-    message = 'Hi! I am a bot'
-    filepath = os.path.join(os.getcwd(),'pythonislove.jpg')
-    sendmsg_with_photo(message, mobile , filepath)
+    mobile = [] #numbers of to texted
+    message = 'Hi! I am a Whatsapp Bot'
+    filepath = os.path.join(os.getcwd(),'pythonislove.png')
+    sendmsg(message, mobile)
 
 
